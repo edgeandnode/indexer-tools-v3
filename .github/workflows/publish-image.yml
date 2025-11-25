@@ -1,40 +1,40 @@
 name: Build and Publish Docker Image
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
     tags:
-      - '*'
+      - "*"
   pull_request_target:
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     permissions: write-all
-    environment: docker-publish  # Requires manual approval for forks
+    environment: docker-publish # Requires manual approval for forks
 
     steps:
-    - name: Checkout PR code
-      uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.pull_request.head.sha || github.ref }}
-    - name: Docker meta
-      id: docker_meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ghcr.io/vincenttaglia/indexer-tools
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
-        password: ${{ secrets.GHCR_TOKEN }}
-    - name: Build the Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: ${{steps.docker_meta.outputs.tags}}
-        labels: ${{steps.docker_meta.outputs.labels}}
-
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+      - name: Docker meta
+        id: docker_meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/vincenttaglia/indexer-tools
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      - name: Build the Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{steps.docker_meta.outputs.tags}}
+          labels: ${{steps.docker_meta.outputs.labels}}
