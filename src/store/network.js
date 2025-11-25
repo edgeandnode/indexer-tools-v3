@@ -55,7 +55,11 @@ export const useNetworkStore = defineStore('network', {
     getIssuancePerBlock: (state) => state.networks[chainStore.getChainID].issuancePerBlock,
     getIssuancePerYear: (state) => state.networks[chainStore.getChainID].issuancePerYear,
     getTotalTokensAllocated: (state) => state.networks[chainStore.getChainID].totalTokensAllocated,
-    isNetworkHorizon: (state) => parseInt(state.networks[chainStore.getChainID].maxThawingPeriod) > 0,
+    isNetworkHorizon: (state) => {
+      // maxThawingPeriod field no longer exists in GraphNetwork schema
+      // Defaulting to false (not Horizon network)
+      return false;
+    },
   },
   actions: {
     async init(){
@@ -68,7 +72,6 @@ export const useNetworkStore = defineStore('network', {
             totalSupply
             currentEpoch
             totalTokensAllocated
-            maxThawingPeriod
           }
         }`,
       }).then((data) => {
@@ -79,7 +82,6 @@ export const useNetworkStore = defineStore('network', {
         this.networks[chain.id].currentEpoch = data.data.graphNetwork.currentEpoch;
         this.networks[chain.id].issuancePerYear = data.data.graphNetwork.networkGRTIssuancePerBlock * chainStore.getBlocksPerYear;
         this.networks[chain.id].totalTokensAllocated = data.data.graphNetwork.totalTokensAllocated;
-        this.networks[chain.id].maxThawingPeriod = data.data.graphNetwork.maxThawingPeriod;
       }).catch((err) => {
         this.loading = false;
         if(err.graphQLErrors[0]?.message){
