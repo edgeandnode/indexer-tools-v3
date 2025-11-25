@@ -12,7 +12,9 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: read
+      packages: write
     environment: docker-publish # Requires manual approval for forks
 
     steps:
