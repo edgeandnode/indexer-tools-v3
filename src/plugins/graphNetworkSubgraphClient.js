@@ -1,30 +1,39 @@
 import { loadDefaultsConfig, replaceAPI } from "./defaultsConfig";
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { configureLogger } from "./logger";
+import { withQueryLogging } from "./queryLoggingLink";
 
 const defaultsConfigVariables = await loadDefaultsConfig();
 const defaultsConfig = defaultsConfigVariables.variables;
-console.log("URI");
-console.log(defaultsConfig.subgraphArbitrum);
+configureLogger(defaultsConfig.logLevel);
 // HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.subgraphMainnet, defaultsConfig.apiKey),
-});
+const httpLink = withQueryLogging(
+  'graph-network-mainnet',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.subgraphMainnet, defaultsConfig.apiKey),
+  }),
+);
 
-const arbitrumHttpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.subgraphArbitrum, defaultsConfig.apiKey),
-});
+const arbitrumHttpLink = withQueryLogging(
+  'graph-network-arbitrum',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.subgraphArbitrum, defaultsConfig.apiKey),
+  }),
+);
 
-const sepoliaHttpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.subgraphSepolia, defaultsConfig.apiKey),
-});
+const sepoliaHttpLink = withQueryLogging(
+  'graph-network-sepolia',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.subgraphSepolia, defaultsConfig.apiKey),
+  }),
+);
 
-const arbitrumSepoliaHttpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.subgraphArbitrumSepolia, defaultsConfig.apiKey),
-});
+const arbitrumSepoliaHttpLink = withQueryLogging(
+  'graph-network-arbitrum-sepolia',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.subgraphArbitrumSepolia, defaultsConfig.apiKey),
+  }),
+);
 
 // Cache implementation
 const cache = new InMemoryCache();
