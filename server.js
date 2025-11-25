@@ -9,7 +9,7 @@ let app = express();
 app.use((req, res, next) => {
   res.setHeader(
     'Content-Security-Policy',
-    "script-src 'self' 'unsafe-eval' 'unsafe-inline'; object-src 'none'; base-uri 'self';"
+    "script-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:* https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; connect-src 'self' https:; object-src 'none'; base-uri 'self';"
   );
   next();
 });
