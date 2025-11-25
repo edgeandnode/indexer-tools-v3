@@ -16,6 +16,14 @@ Override default accounts for users with no cache/local storage.
 DEFAULT_ACCOUNTS='[ { "address": "0x1b92e4cba0f82c85c1298af861247849988c788c", "name": "vincenttaglia-indexer.eth", "active": true, "chain": "arbitrum-one", "agentConnect": false, "agentEndpoint": "", "poiQuery": false, "poiQueryEndpoint": "" } ]'
 ```
 
+### LOG_LEVEL / DEFAULT_LOG_LEVEL
+#### Description
+Control verbosity of the structured JSON logs for GraphQL queries. Accepts `error`, `warn`, `info`, `debug`, or `trace`. `LOG_LEVEL` takes precedence when both are set.
+#### Example
+```
+LOG_LEVEL="debug"
+```
+
 ### DEFAULT_QOS_SUBGRAPH
 #### Description
 Override default QoS subgraph.

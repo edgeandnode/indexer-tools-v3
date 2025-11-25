@@ -1,29 +1,40 @@
 import { loadDefaultsConfig, replaceAPI } from "./defaultsConfig";
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { configureLogger } from "./logger";
+import { withQueryLogging } from "./queryLoggingLink";
 
 const defaultsConfigVariables = await loadDefaultsConfig();
 const defaultsConfig = defaultsConfigVariables.variables;
+configureLogger(defaultsConfig.logLevel);
 
 // HTTP connection to the API
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.eboMainnet, defaultsConfig.apiKey),
-});
+const httpLink = withQueryLogging(
+  'ebo-mainnet',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.eboMainnet, defaultsConfig.apiKey),
+  }),
+);
 
-const arbitrumHttpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.eboArbitrum, defaultsConfig.apiKey),
-});
+const arbitrumHttpLink = withQueryLogging(
+  'ebo-arbitrum',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.eboArbitrum, defaultsConfig.apiKey),
+  }),
+);
 
-const sepoliaHttpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.eboSepolia, defaultsConfig.apiKey),
-});
+const sepoliaHttpLink = withQueryLogging(
+  'ebo-sepolia',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.eboSepolia, defaultsConfig.apiKey),
+  }),
+);
 
-const arbitrumSepoliaHttpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: replaceAPI(defaultsConfig.eboArbitrumSepolia, defaultsConfig.apiKey),
-});
+const arbitrumSepoliaHttpLink = withQueryLogging(
+  'ebo-arbitrum-sepolia',
+  createHttpLink({
+    uri: replaceAPI(defaultsConfig.eboArbitrumSepolia, defaultsConfig.apiKey),
+  }),
+);
 
 // Cache implementation
 const cache = new InMemoryCache();

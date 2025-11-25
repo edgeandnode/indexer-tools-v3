@@ -6,6 +6,25 @@ Indexer tools aims to be the one-stop-shop for indexers that are a part of the G
 
 Indexer Tools utilizes Vue 3's Composition API and Vuetify 3's component framework in an effort to create a more sustainable project architecture.
 
+# Logging
+GraphQL queries now emit structured JSON logs so you can trace request/response activity across networks. Configure verbosity via any of the following (in order of precedence):
+
+- `VITE_LOG_LEVEL` environment variable when building the app
+- `LOG_LEVEL` or `DEFAULT_LOG_LEVEL` in `indexer-tools-config.json`
+- Docker env vars of the same name
+
+Supported levels: `error`, `warn`, `info`, `debug`, `trace`. Example `.env` entry:
+
+```
+VITE_LOG_LEVEL=debug
+```
+
+Sample log line:
+
+```
+{"timestamp":"2025-11-25T18:43:12.443Z","level":"info","message":"graphql.request","client":"graph-network-mainnet","operation":"AllocationQuery","variables":{"id":"0x123..."}}
+```
+
 # Custom Deployments
 ### API Keys
 Custom deployments require a Graph Studio API key, available here:
